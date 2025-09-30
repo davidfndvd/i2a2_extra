@@ -75,7 +75,7 @@ def create_llm(api_key):
     return ChatGemini(
         model="gemini-2.5-flash",
         google_api_key=api_key,
-        temperature=5,  # Respostas consistentes para análise
+        temperature=0.1,  # Respostas consistentes para análise
         convert_system_message_to_human=True
     )
 
