@@ -1,18 +1,20 @@
 # -*- coding: utf-8 -*-
 
 """
-Analisador de CSV com IA - V2 - Interface Streamlit
+Analise arquivos CSV com IA - Versão DvDSoft
 ==============================================
 
-Este aplicativo cria um assistente inteligente para análise de dados em CSV.
-Permite upload de arquivos, consultas em linguagem natural e geração automática
-de gráficos e insights usando Google Gemini e LangChain.
+Este é um assistente baseado em Inteligência Artificial que permite analisar informações de arquivos  CSV.
+Aqui você pode realizar  upload de arquivos, realizar consultas em linguagem natural e ter como reusltado
+geração de  gráficos, análises e insights sobre estes dados 
 
-Autor: Carlos Antônio Campos Jorge
+A solução utiliza a LLM Google Gemini e LangChain.
+
+Autor: David de Freitas Neto
 Funcionalidades:
-- Interface web responsiva
 - Upload de arquivos CSV
-- Análise de dados com IA
+- Interface web para interação com usuário. A interface é responsiva
+- É possível realizar análise dos dados contidos nos arquivos, utilizando IA
 - Geração de gráficos automática
 - Histórico de conversação
 """
@@ -41,14 +43,14 @@ Instruções:
 - Responda perguntas sobre o DataFrame chamado 'df'
 - Execute código Python usando a ferramenta disponível
 - Para gráficos, use Matplotlib ou Seaborn padrão (sem st.pyplot)
-- Base suas respostas nos dados reais do CSV
+- Suas respostas devem ser baseadas em dados reais do CSV
 - Use 2 casas decimais para números
 - Seja objetivo e direto
 - Prefira tabelas para organizar informações
 - Crie gráficos quando apropriado (histogramas, barras, dispersão, etc.)
 - Explique suas conclusões claramente
 - Responda em português
-- Se não souber algo, diga: "Não tenho essa informação. Como posso ajudar?"
+- Se não souber algo, diga: "Não sei responder isso. Poderia fazer outra pergunta?"
 - Não mostre o código gerado, apenas os resultados
 """
 
@@ -73,7 +75,7 @@ def create_llm(api_key):
     return ChatGemini(
         model="gemini-2.5-flash",
         google_api_key=api_key,
-        temperature=0,  # Respostas consistentes para análise
+        temperature=5,  # Respostas consistentes para análise
         convert_system_message_to_human=True
     )
 
@@ -177,29 +179,29 @@ def create_sidebar():
         tuple: (api_key, arquivo_carregado)
     """
     with st.sidebar:
-        st.header("🔧 Configurações")
+        st.header("⚙️ Configurações")
         
         # Carregamento da API Key
         try:
             api_key = st.secrets["GOOGLE_API_KEY"]
-            st.success("Chave API carregada!")
+            st.success("Chave API da LLM carregada com Sucesso!")
         except (KeyError, FileNotFoundError):
-            st.warning("Configure a chave API no arquivo .streamlit/key.toml")
+            st.warning("Configure a sua chave API no arquivo .streamlit/secrets.toml")
             api_key = st.text_input(
                 "Chave API Google Gemini",
                 type="password",
-                help="Configure permanentemente em .streamlit/key.toml"
+                help="Configure permanentemente em .streamlit/secrets.toml"
             )
         
         # Upload de arquivo
         uploaded = st.file_uploader(
-            "📁 Carregar arquivo CSV",
+            "📄 Carregar arquivo - somente CSV",
             type="csv"
         )
         
         # Botão de reset
         st.button(
-            "🔄 Nova Conversa", 
+            "🗨️ Inicie uma Nova Conversa", 
             on_click=reset_chat, 
             use_container_width=True
         )
@@ -207,13 +209,14 @@ def create_sidebar():
         # Instruções de uso
         st.info(
             """
-            **📋 Como usar:**
+            **🧭 Orientações para Uso:**
             
-            1. Insira sua **chave API** do Google Gemini na barra lateral
-            2. Carregue um **arquivo CSV**
-            3. Faça suas **perguntas** no chat
+            1. Caso a chave API não tenha sido carregada automaticamente, insira sua **chave API** do Google Gemini na barra lateral
+            2. Carregue seu **arquivo CSV**
+            3. Façatodas as suas **perguntas** e solicitações no chat
             
-            **💡 Exemplos:**
+            **👀 Exemplos:**
+            - O que você pode me falar sobre este arquivo
             - Quais tipos de dados existem? Há valores faltando?
             - Crie um gráfico de outliers para variável X
             - Mostre estatísticas básicas (média, mediana, etc.)
@@ -231,14 +234,14 @@ def handle_chat(agent):
     Args:
         agent: Agente de análise configurado
     """
-    if user_input := st.chat_input("Digite sua pergunta sobre os dados..."):
+    if user_input := st.chat_input("Coloque aqui a sua sua pergunta, dúvida ou orientação..."):
         st.session_state.chat_history.append(HumanMessage(content=user_input))
         
         with st.chat_message("user"):
             st.markdown(user_input)
         
         with st.chat_message("assistant"):
-            with st.spinner("🔍 Analisando dados..."):
+            with st.spinner("🧠 Estou processando sua solicitação..."):
                 try:
                     # Limpa plots anteriores
                     plt.clf()
@@ -261,7 +264,7 @@ def handle_chat(agent):
                     st.session_state.chat_history.append(ai_msg)
                     
                 except Exception as error:
-                    error_msg = f"❌ Erro na análise: {str(error)}"
+                    error_msg = f"❌ Ocorreu um problema na análise: {str(error)}"
                     st.error(error_msg)
                     st.session_state.chat_history.append(AIMessage(content=error_msg))
 
@@ -275,15 +278,15 @@ def main():
     Função principal do aplicativo.
     """
     st.set_page_config(
-        page_title="Analisador de CSV com IA",
-        page_icon="📊",
+        page_title="Assistente de análise de CSV",
+        page_icon="📈",
         layout="wide"
     )
     
-    st.title("📊 Analisador de CSV com IA")
+    st.title("📈 Seu assistente de análise de arquivos CSV com IA")
     st.write(
-        "**Bem-vindo!** Use inteligência artificial para analisar seus dados CSV. "
-        "Configure sua API na barra lateral e carregue seus dados para começar."
+        "**Olá!** Eu posso analisar seu arquivo CSV com IA. "
+        "Caso a API dE IA não tenha sido automaticamente carrerraga, cole ela na barra lateral e carregue seu CSV para iniciar."
     )
     
     # Configuração inicial
@@ -292,11 +295,11 @@ def main():
     
     # Validações de pré-requisitos
     if not api_key:
-        st.warning("⚠️ Insira sua chave API na barra lateral")
+        st.warning("⚠️ Disponibilize  sua chave API")
         return
         
     if uploaded_file is None:
-        st.info("📤 Carregue um arquivo CSV para iniciar")
+        st.info("📤 Informe um arquivo CSV para iniciar a análise")
         return
     
     # Exibe histórico de conversas
@@ -312,7 +315,7 @@ def main():
     if df is not None:
         # Mostra prévia apenas uma vez
         if not st.session_state.get('data_loaded', False):
-            st.success("✅ Dados carregados! Prévia:")
+            st.success("✅ Dados carregados! Segue prévia:")
             st.dataframe(df.head())
             st.session_state.data_loaded = True
         
