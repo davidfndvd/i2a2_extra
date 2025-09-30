@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 
 """
-Analise arquivos CSV com IA - Versão DvDSoft
+Analise arquivos CSV com IA
 ==============================================
 
-Este é um assistente baseado em Inteligência Artificial que permite analisar informações de arquivos  CSV.
+Este é um assistente baseado em Inteligência Artificial que permite analisar informações de arquivos CSV.
 Aqui você pode realizar  upload de arquivos, realizar consultas em linguagem natural e ter como reusltado
 geração de  gráficos, análises e insights sobre estes dados 
 
