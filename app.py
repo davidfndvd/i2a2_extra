@@ -286,7 +286,7 @@ def main():
     st.title("📈 Seu assistente de análise de arquivos CSV com IA")
     st.write(
         "**Olá!** Eu posso analisar seu arquivo CSV com IA. "
-        "Caso a API dE IA não tenha sido automaticamente carrerraga, cole ela na barra lateral e carregue seu CSV para iniciar."
+        "Caso a API não tenha sido automaticamente carrerraga, cole ela na barra lateral e carregue seu CSV para iniciar."
     )
     
     # Configuração inicial
