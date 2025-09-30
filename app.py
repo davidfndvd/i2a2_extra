@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Analisador de CSV com IA - Interface Streamlit
+Analisador de CSV com IA - V2 - Interface Streamlit
 ==============================================
 
 Este aplicativo cria um assistente inteligente para análise de dados em CSV.
